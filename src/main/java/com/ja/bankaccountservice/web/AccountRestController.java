@@ -1,7 +1,10 @@
 package com.ja.bankaccountservice.web;
 
+import com.ja.bankaccountservice.dto.BankAccountRequestDTO;
+import com.ja.bankaccountservice.dto.BankAccountResponseDTO;
 import com.ja.bankaccountservice.entities.BankAccount;
 import com.ja.bankaccountservice.repositories.BankAccountRepository;
+import com.ja.bankaccountservice.service.AccountService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -10,6 +13,7 @@ import java.util.List;
 @RestController
 public class AccountRestController {
     private BankAccountRepository bankAccountRepository;
+    private AccountService accountService;
 
     public AccountRestController(BankAccountRepository bankAccountRepository) {
         this.bankAccountRepository = bankAccountRepository;
@@ -24,8 +28,8 @@ public class AccountRestController {
                 .orElseThrow(()->new RuntimeException(String.format("Account %s Not  Found", id)));
     }
     @PostMapping("/bankAccounts/")
-    public BankAccount save(@RequestBody BankAccount bankAccount){
-        return bankAccountRepository.save(bankAccount);
+    public BankAccountResponseDTO save(@RequestBody BankAccountRequestDTO requestDTO){
+        return accountService.addAccount(requestDTO);
     }
 
     @PostMapping("/bankAccounts/{id}")
